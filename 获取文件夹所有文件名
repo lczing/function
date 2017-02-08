@@ -1,0 +1,24 @@
+<?php
+var_dump(getDirFiles(__DIR__));
+
+function getDirFiles($dir){
+    if (is_dir($dir)) {
+        $files = scandir($dir);
+        $res = array();
+        foreach ($files as $filename ){
+            if ($filename == '.' || $filename == '..') {
+                continue;
+            }
+            
+            if (is_dir($filename)) {
+                $res[$filename] = getDirFiles($dir.'\\'.$filename);
+            }else{
+                $res[] = $filename;
+            }
+        }
+        return $res;
+    }else{
+        return $dir;
+    }
+};
+?>
