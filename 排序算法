@@ -100,3 +100,43 @@ function InsertSort($arr){
 }
 echo '插入排序：';
 echo implode(' ',InsertSort($arr))."<br/>";
+
+//快速排序-关联数组
+function qasrot($arr){
+    if (count($arr) <= 1) {
+        return $arr;
+    }
+    
+    $left = array();
+    $right = array();
+    $point = '';
+    $pkey = '';
+    foreach ($arr as $key=>$value){
+        if ($point === '') {
+            $point = $value;
+            $pkey = $key;
+            continue;
+        }
+        
+        if ($value<=$point) {
+            $left[$key] = $value;
+        }else{
+            $right[$key] = $value;
+        }
+    }
+    $left = qasrot($left);
+    $right = qasrot($right);
+    
+    return array_merge($left,array($pkey=>$point),$right);
+}
+
+$arr = array(
+    'a'=>2,
+    'b'=>4,
+    'c'=>1,
+    'd'=>3
+);
+
+var_dump(($arr));
+echo "<br />快速排序-关联数组：<br />";
+var_dump(qasrot($arr));
