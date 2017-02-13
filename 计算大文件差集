@@ -5,9 +5,8 @@ var_dump($result);
 
 /**
  * 计算文件差集
- * @param  [string] $file [文件句柄]
- * @param  [int] $num [读取行数]
- * @return mix       文件内容数组/非法文件错误
+ * @param  [string] $file1 [文件名]
+ * @param  [string] $file2 [文件名]
  */
 function getFileDiff($file1,$file2){
     $file1_h = fopen($file1, "r");
