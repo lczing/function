@@ -1,0 +1,63 @@
+$file1 = './a.txt';
+$file2 = './b.txt';
+$result = getFileDiff($file1,$file2);
+var_dump($result);
+
+/**
+ * 计算文件差集
+ * @param  [string] $file [文件句柄]
+ * @param  [int] $num [读取行数]
+ * @return mix       文件内容数组/非法文件错误
+ */
+function getFileDiff($file1,$file2){
+    $file1_h = fopen($file1, "r");
+    
+    $num = 10000;//读取文件行数
+    $result = array();
+    while (1){
+        $array1 = getFileContents($file1_h,$num);//分页读取文件1数据
+        $file2_h = fopen($file2, "r");
+        $tmp = array();
+        while (1){
+            $array2 = getFileContents($file2_h,$num);//分页读取文件2数据
+            $sub = array_diff($array1, $array2);//计算差集
+            if (empty($tmp)) {
+                $tmp = $sub;
+            }else{
+                $tmp = array_intersect($tmp, $sub);//计算交集
+            }
+            if (feof($file2_h)) {
+                fclose($file2_h);
+                break;
+            }
+        }
+        $result = array_merge($result,$tmp);//合并结果
+        $result = array_flip(array_flip($result));//去重
+        if (feof($file1_h)) {
+            fclose($file1_h);
+            break;
+        }
+    }
+    
+    return $result;
+}
+
+/**
+ * 获取文件内容到数组
+ * @param  [string] $file [文件句柄]
+ * @param  [int] $num [读取行数]
+ * @return mix       文件内容数组/非法文件错误
+ */
+function getFileContents($file,$num=10000){
+    $arr = []; // 存放文件内容的数组
+    $i = 0; // 从 0 行还开读取文件内容
+    while (!feof($file)) {
+        $arr[] = fgets($file);; // fgets()函数从文件指针中读取一行
+        $i++;
+        if($i>=$num){
+            break;
+        }
+    }
+
+    return $arr;
+}
